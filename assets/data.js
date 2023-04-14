@@ -33,7 +33,6 @@ const parseData = (data) => {
 	graph.style.setProperty('--cinnamon', cinnamonCount)
 	graph.style.setProperty('--black', blackCount)
 	graph.style.setProperty('--undefined', undefinedCount)
-	graph.style.setProperty('--total', grayCount + cinnamonCount + blackCount + undefinedCount) // Combined
 }
 
 // Watch for any change on the dropdown
