@@ -18,6 +18,8 @@ h1 {
     font-weight: bold;
 }
 
+label { opacity: 50%; }
+
 select, ul {
     background-color: #eee;
     border-radius: calc(var(--spacing) / 4);
@@ -30,7 +32,7 @@ select {
     width: fit-content;
 }
 
-ul {
+#graph {
     /* Add up the individual counts, from the JS. */
     --total: calc(var(--gray) + var(--cinnamon) + var(--black) + var(--undefined));
 
@@ -40,25 +42,16 @@ ul {
 }
 
 /* Ease the widths, when we change via dropdown. */
-li { transition: width 1s ease-in-out; }
-
-
-.gray, .cinnamon, .black {
-    border-right: 2px solid #eee
+#graph li { 
+    transition: width 1s ease-in-out;
+    border-right: 3px solid #eee;
 }
 
-.gray {
-    background-color: gray;
-    /* Calculate from the JS variable. */
-    width: calc(var(--gray) / var(--total) * 100%);
-}
+/* Calculate from the JS variable. */
+#graph .gray { width: calc(var(--gray) / var(--total) * 100%); }
+#graph .cinnamon { width: calc(var(--cinnamon) / var(--total) * 100%); }
+#graph .black { width: calc(var(--black) / var(--total) * 100%); }
 
-.cinnamon {
-    background-color: #a21;
-    width: calc(var(--cinnamon) / var(--total) * 100%);
-}
-
-.black {
-    background-color: #444;
-    width: calc(var(--black) / var(--total) * 100%);
-}
+.gray { background-color: gray; }
+.cinnamon { background-color: #a51; }
+.black { background-color: #444; }
