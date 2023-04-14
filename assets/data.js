@@ -1,5 +1,7 @@
 let url = 'https://data.cityofnewyork.us/resource/vfnx-vebw.json'
+let localData = []
 let graph = document.querySelector('#graph')
+let dropdown = document.querySelector('#shift')
 
 const parseData = (data) => {
 	let grayCount = 0
@@ -29,8 +31,17 @@ const parseData = (data) => {
 	graph.style.setProperty('--total', grayCount + cinnamonCount + blackCount + undefinedCount)
 }
 
+dropdown.oninput = () => {
+	if (dropdown.value == 'Morning') parseData(localData.filter(squirrel => squirrel.shift == 'AM'))
+	else if (dropdown.value == 'Afternoon') parseData(localData.filter(squirrel => squirrel.shift == 'PM'))
+	else parseData(localData)
+}
+
 
 
 fetch(url + '?$limit=50000')
 	.then(response => response.json())
-	.then(data => parseData(data))
+	.then(data => {
+			localData = data
+			parseData(localData)
+		})

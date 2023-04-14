@@ -11,6 +11,8 @@ ul {
     width: 100%;
 }
 
+li { transition: width 1s ease-in-out; }
+
 .gray {
     background-color: gray;
     width: calc(var(--gray) / var(--total) * 100%);
@@ -24,4 +26,8 @@ ul {
 .black {
     background-color: #222;
     width: calc(var(--black) / var(--total) * 100%);
+}
+
+select {
+    margin-top: 2em;
 }
