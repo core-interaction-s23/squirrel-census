@@ -1,9 +1,9 @@
 // Your data URL
 const url = 'https://data.cityofnewyork.us/resource/vfnx-vebw.json'
-
-let localData = [] // Set up an empty object for our data—`let` because it will change
-const graph = document.querySelector('#graph') // Get out graph element—`const`, does not change
+const graph = document.querySelector('#graph') // Get out graph element (`const`, does not change)
 const dropdown = document.querySelector('#shift') // Get the dropdown menu
+
+let localData = [] // Set up an empty object for our local data (`let` because it will change)
 
 // Do something with the data!
 const parseData = (data) => {
@@ -37,17 +37,21 @@ const parseData = (data) => {
 
 // Watch for any change on the dropdown
 dropdown.oninput = () => {
-	// Send filtered data to our parse function, based on the selection
-	if (dropdown.value == 'Morning') parseData(localData.filter(squirrel => squirrel.shift == 'AM'))
-	else if (dropdown.value == 'Afternoon') parseData(localData.filter(squirrel => squirrel.shift == 'PM'))
+	// Filter the locally-copied data
+	const localDataAm = localData.filter(squirrel => squirrel.shift == 'AM')
+	const localDataPm = localData.filter(squirrel => squirrel.shift == 'PM')
+
+	// Parse either set depending on the dropdown value
+	if (dropdown.value == 'Morning') parseData(localDataAm)
+	else if (dropdown.value == 'Afternoon') parseData(localDataPm)
 	else parseData(localData) // Send the whole, unfiltered dataset
 }
 
 
-
+// Go get the data!
 fetch(url + '?$limit=50000') // Appends a higher limit; the default is only 1000
 	.then(response => response.json())
 	.then(data => {
-			localData = data // Save the data to our local variable
-			parseData(localData) // And parse it
+			localData = data // Save the data to our local variable, so we don’t have to re-request
+			parseData(localData) // And parse it!
 		})
