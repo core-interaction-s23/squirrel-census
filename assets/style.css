@@ -37,7 +37,7 @@ select {
     --total: calc(var(--gray) + var(--cinnamon) + var(--black) + var(--undefined));
 
     display: flex;
-    height: var(--spacing);
+    height: calc(var(--spacing) * 3);
     overflow: hidden;
 }
 
