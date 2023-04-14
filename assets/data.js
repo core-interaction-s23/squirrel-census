@@ -1,4 +1,5 @@
 let url = 'https://data.cityofnewyork.us/resource/vfnx-vebw.json'
+let graph = document.querySelector('#graph')
 
 const parseData = (data) => {
 	let grayCount = 0
@@ -8,7 +9,7 @@ const parseData = (data) => {
 
 	data.forEach(squirrel => {
 		if (squirrel.primary_fur_color == 'Gray') grayCount = grayCount + 1
-		if (squirrel.primary_fur_color == 'Gray') grayCount++
+		// if (squirrel.primary_fur_color == 'Gray') grayCount++
 		else if (squirrel.primary_fur_color == 'Cinnamon') cinnamonCount = cinnamonCount + 1
 		else if (squirrel.primary_fur_color == 'Black') blackCount = blackCount + 1
 		else undefinedCount = undefinedCount + 1
@@ -20,6 +21,12 @@ const parseData = (data) => {
 	console.log('Cinnamon: ' + cinnamonCount)
 	console.log('Black: ' + blackCount)
 	console.log('Undefined: ' + undefinedCount)
+
+	graph.style.setProperty('--gray', grayCount)
+	graph.style.setProperty('--cinnamon', cinnamonCount)
+	graph.style.setProperty('--black', blackCount)
+	graph.style.setProperty('--undefined', undefinedCount)
+	graph.style.setProperty('--total', grayCount + cinnamonCount + blackCount + undefinedCount)
 }
 
 
