@@ -53,9 +53,15 @@ dropdown.oninput = () => {
 
 
 // Go get the data!
-fetch(url + '?$limit=50000') // Appends a higher limit; the default is only 1000
+fetch(url + '?$select=count(*)') // First, get the total number of rows (entries)
 	.then(response => response.json())
-	.then(responseData => {
-		localData = responseData // Save the data to a local variable, so we don’t have to re-request
-		parseData(localData) // And parse it!
+	.then(data => {
+		let rowCount = data[0].count // Get the count from this response
+
+		fetch(url + '?$limit=' + rowCount) // Use the count as the limit, to get the full dataset
+			.then(response => response.json())
+			.then(data => {
+				localData = data // Save the data to a local variable, so we don’t have to re-request
+				parseData(localData) // And parse it!
+			})
 	})
