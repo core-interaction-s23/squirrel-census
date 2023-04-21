@@ -52,11 +52,11 @@ dropdown.oninput = () => {
 
 
 
-// This got complicated, but it should make the API less annoying! 🤞
+// This got pretty complicated, but it should make the API less annoying! 🤞
 caches.open('cachedData') // Set up a cache for our data
 	.then(cache => {
 		// See if there is already a cached response for our dataset
-		cache.match(url, {ignoreSearch: true})
+		cache.match(url)
 			.then(response => response.json())
 			.then(data => {
 				console.log('Loading data from cache…')
@@ -69,10 +69,12 @@ caches.open('cachedData') // Set up a cache for our data
 					.then(response => response.json())
 					.then(data => {
 						let rowCount = data[0].count // Get the count out of this response
-						// Use the count as the limit for the API request
-						cache.add(url + '?$limit=' + rowCount) // Cache the response
-						fetch(url + '?$limit=' + rowCount) // But also use it right away!
-							.then(response => response.json())
+						// Use the count as the limit for the API request, to get the full dataset
+						fetch(url + '?$limit=' + rowCount)
+							.then(response => {
+								cache.put(url, response.clone()) // Cache a copy for next time
+								return response.json()
+							})
 							.then(data => {
 								console.log('Loading data from API…')
 								data = data // Same as above!
