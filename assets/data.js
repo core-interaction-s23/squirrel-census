@@ -41,13 +41,13 @@ const parseData = (data) => {
 // Watch for any change on the dropdown
 dropdown.oninput = () => {
 	// Filter the locally-copied data
-	const dataAm = data.filter(squirrel => squirrel.shift == 'AM')
-	const dataPm = data.filter(squirrel => squirrel.shift == 'PM')
+	const dataAm = localData.filter(squirrel => squirrel.shift == 'AM')
+	const dataPm = localData.filter(squirrel => squirrel.shift == 'PM')
 
 	// Parse either set depending on the dropdown value
 	if (dropdown.value == 'Morning') parseData(dataAm)
 	else if (dropdown.value == 'Afternoon') parseData(dataPm)
-	else parseData(data) // Send the whole, unfiltered dataset
+	else parseData(localData) // Send the whole, unfiltered dataset
 }
 
 
@@ -60,8 +60,8 @@ caches.open('cachedData') // Set up a cache for our data
 			.then(response => response.json())
 			.then(data => {
 				console.log('Loading data from cache…')
-				data = data // Save the data to a “global” variable
-				parseData(data) // And parse it!
+				localData = data // Save the data out to our local, global variable
+				parseData(localData) // And parse it!
 			})
 			// If there is not a cache, let’s get and make one
 			.catch(error => {
@@ -77,8 +77,8 @@ caches.open('cachedData') // Set up a cache for our data
 							})
 							.then(data => {
 								console.log('Loading data from API…')
-								data = data // Same as above!
-								parseData(data)
+								localData = data // Same as above!
+								parseData(localData)
 							})
 					})
 			})
