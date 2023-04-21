@@ -56,6 +56,6 @@ dropdown.oninput = () => {
 fetch(url + '?$limit=50000') // Appends a higher limit; the default is only 1000
 	.then(response => response.json())
 	.then(responseData => {
-			localData = responseData // Save the data to a local variable, so we don’t have to re-request
-			parseData(localData) // And parse it!
-		})
+		localData = responseData // Save the data to a local variable, so we don’t have to re-request
+		parseData(localData) // And parse it!
+	})
