@@ -59,6 +59,7 @@ caches.open('cachedData') // Set up a cache for our data
 		cache.match(url, {ignoreSearch: true})
 			.then(response => response.json())
 			.then(data => {
+				console.log('Loading data from cache…')
 				data = data // Save the data to a “global” variable
 				parseData(data) // And parse it!
 			})
@@ -68,7 +69,15 @@ caches.open('cachedData') // Set up a cache for our data
 					.then(response => response.json())
 					.then(data => {
 						let rowCount = data[0].count // Get the count out of this response
-						cache.add(url + '?$limit=' + rowCount) // Use the count as the limit, to get (and cache) the full dataset!
+						// Use the count as the limit for the API request
+						cache.add(url + '?$limit=' + rowCount) // Cache the response
+						fetch(url + '?$limit=' + rowCount) // But also use it right away!
+							.then(response => response.json())
+							.then(data => {
+								console.log('Loading data from API…')
+								data = data // Same as above!
+								parseData(data)
+							})
 					})
 			})
 	})
