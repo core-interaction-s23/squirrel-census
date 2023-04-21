@@ -41,27 +41,34 @@ const parseData = (data) => {
 // Watch for any change on the dropdown
 dropdown.oninput = () => {
 	// Filter the locally-copied data
-	const localDataAm = localData.filter(squirrel => squirrel.shift == 'AM')
-	const localDataPm = localData.filter(squirrel => squirrel.shift == 'PM')
+	const dataAm = data.filter(squirrel => squirrel.shift == 'AM')
+	const dataPm = data.filter(squirrel => squirrel.shift == 'PM')
 
 	// Parse either set depending on the dropdown value
-	if (dropdown.value == 'Morning') parseData(localDataAm)
-	else if (dropdown.value == 'Afternoon') parseData(localDataPm)
-	else parseData(localData) // Send the whole, unfiltered dataset
+	if (dropdown.value == 'Morning') parseData(dataAm)
+	else if (dropdown.value == 'Afternoon') parseData(dataPm)
+	else parseData(data) // Send the whole, unfiltered dataset
 }
 
 
 
-// Go get the data!
-fetch(url + '?$select=count(*)') // First, get the total number of rows (entries)
-	.then(response => response.json())
-	.then(data => {
-		let rowCount = data[0].count // Get the count from this response
-
-		fetch(url + '?$limit=' + rowCount) // Use the count as the limit, to get the full dataset
+// This got complicated, but it should make the API less annoying! 🤞
+caches.open('cachedData') // Set up a cache for our data
+	.then(cache => {
+		// See if there is already a cached response for our dataset
+		cache.match(url, {ignoreSearch: true})
 			.then(response => response.json())
 			.then(data => {
-				localData = data // Save the data to a local variable, so we don’t have to re-request
-				parseData(localData) // And parse it!
+				data = data // Save the data to a “global” variable
+				parseData(data) // And parse it!
+			})
+			// If there is not a cache, let’s get and make one
+			.catch(error => {
+				fetch(url + '?$select=count(*)') // First, go get the total number of rows (entries)
+					.then(response => response.json())
+					.then(data => {
+						let rowCount = data[0].count // Get the count out of this response
+						cache.add(url + '?$limit=' + rowCount) // Use the count as the limit, to get (and cache) the full dataset!
+					})
 			})
 	})
