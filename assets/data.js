@@ -1,9 +1,10 @@
 // Your data URL
 const url = 'https://data.cityofnewyork.us/resource/vfnx-vebw.json'
+
 const graph = document.querySelector('#graph') // Get out graph element (`const`, does not change)
 const dropdown = document.querySelector('#shift') // Get the dropdown menu
 
-let localData = [] // Set up an empty object for our local data (`let` because it will change)
+
 
 // Do something with the data!
 const parseData = (data) => {
@@ -35,6 +36,8 @@ const parseData = (data) => {
 	graph.style.setProperty('--undefined', undefinedCount)
 }
 
+
+
 // Watch for any change on the dropdown
 dropdown.oninput = () => {
 	// Filter the locally-copied data
@@ -48,10 +51,11 @@ dropdown.oninput = () => {
 }
 
 
+
 // Go get the data!
 fetch(url + '?$limit=50000') // Appends a higher limit; the default is only 1000
 	.then(response => response.json())
-	.then(data => {
-			localData = data // Save the data to our local variable, so we don’t have to re-request
+	.then(responseData => {
+			localData = responseData // Save the data to a local variable, so we don’t have to re-request
 			parseData(localData) // And parse it!
 		})
